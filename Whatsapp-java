@@ -1,1 +1,34 @@
+package Whatsapp;
 
+import java.util.Scanner;
+import java.util.regex.Pattern;
+
+public class Whatsapp {   
+   
+ 
+    private String registeredUsername;
+    private String registeredPassword;
+    private String registeredCellPhone;
+    private String firstName;
+    private String lastName;
+    public Whatsapp() { 
+        
+    }
+   
+    public Whatsapp(String firstName, String lastName) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+       
+    }
+    public String getFirstName() {
+        return firstName;
+    }
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+    public String getLastName () {
+        return lastName;
+    }
+    public void setLastName (String lastName) {
+            this.lastName = lastName;
+            
