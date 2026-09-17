@@ -3,7 +3,7 @@ package Whatsapp;
 import java.util.Scanner;
 import java.util.regex.Pattern;
 
-public class Whatsapp {   
+public class WhatsappChat {   
    
  
     private String registeredUsername;
@@ -15,7 +15,7 @@ public class Whatsapp {
         
     }
    
-    public Whatsapp(String firstName, String lastName) {
+    public WhatsappChat(String firstName, String lastName) {
         this.firstName = firstName;
         this.lastName = lastName;
        
