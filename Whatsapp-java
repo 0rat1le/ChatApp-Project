@@ -1,142 +1,38 @@
-package Whatsapp;
+package WhatsappChat;
 
 import java.util.Scanner;
 import java.util.regex.Pattern;
 
-public class Whatsapp {   
-   
- 
-    private String registeredUsername;
-    private String registeredPassword;
-    private String registeredCellPhone;
-    private String firstName;
-    private String lastName;
-    public Whatsapp() { 
-        
-    }
-   
-    public Whatsapp(String firstName, String lastName) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-       
-    }
-    public String getFirstName() {
-        return firstName;
-    }
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-    public String getLastName () {
-        return lastName;
-    }
-    public void setLastName (String lastName) {
-            this.lastName = lastName;
-            
-    public static void main(String[] args) {
-                Scanner scanner = new Scanner(System.in);
-                System.out.println("===USER REGISTRATION");
-                System.out.println("Enter First Name: ");
-                String firstName = scanner.nextLine();
-                
-                System.out.println("Enter Last Name: ");
-                String lastName = scanner.nextLine();
-                
-                Whatsapp userLogin = new Whatsapp(firstName, lastName);
-                
-                System.out.print("Enter username");
-                String username= scanner.nextLine();
-                
-                System.out.println("Enter Password");
-                String password = scanner.nextLine();
-                
-                System.out.println("Enter Cellphone Number");
-                String cellPhone = scanner.nextLine();
-                
-                String registrationMessage = userLogin.registerUser(username, password, cellPhone);
-                System.out.println("n\" + registrationMessage");
-                       
-                if (registrationMessage.contains("incorrectly formatted") || registrationMessage.contains("not corretly formatted")) {
-                    System.out.println("\nRegistration failed. Exiting" );
-                    scanner.close();
-                    return;
-                    
-                }
-               System.out.println("\n=== LOGIN ===");
-        System.out.print("Enter Username: ");
-        String loginUsername = scanner.nextLine();
+public class WhatsappChat{
 
-        System.out.print("Enter Password: ");
-        String loginPassword = scanner.nextLine();
+	
+	private String registeredUsername;
+	private String registeredPassword;
+	private String registeredCellPhone;
+	private String firstName;
+	private String lastName;
 
-        boolean loginSuccess = userLogin.loginUser(loginUsername, loginPassword);
-        System.out.println("\n" + userLogin.returnLoginStatus(loginSuccess));
+	
+	public WhatsappChat() {
+	}
 
-        scanner.close();
-            }
-    }
-     public boolean checkUsername(String password) {
-         return registeredUsername != null && registeredUsername.contains("-") && registeredUsername.length() <= 5;
-     }
-     public boolean checkPasswordComplexity(String password) {
-         if (password == null || password.length() < 8) {
-             return false;
-         }
-         boolean hasUppercase = false;
-         boolean hasDigit = false;
-         boolean hasSpecialChar = false;
-          for (char c : password.toCharArray()) {
-              if (Character.isUpperCase(c)) {
-                  hasUppercase = true;
-              }
-              else if (Character.isDigit(c)){
-                  hasDigit = true;
-              }
-              else if (Character.isLetterOrDigit(c)){
-                  hasSpecialChar = true;
-              }
-          }
-          return hasUppercase && hasDigit && hasSpecialChar;
-         }
-     public boolean checkCellPhoneNumber(String cellPhoneNumber) {
-         if (cellPhoneNumber == null) {
-            return false;
-}
-         String cellRegex = "^\\+\\d{1,9}$";
-        return cellPhoneNumber.length() <= 10 && Pattern.matches (cellRegex, cellPhoneNumber);
-    }
-     public String registerUser(String username, String password, String cellPhone) {
-        if (!checkUsername(username)) {
-            return "Username is not correctly formatted; please ensure that your username contains an underscore and is no more than five characters in length.";
-        }
-        if (!checkPasswordComplexity(password)) {
-            return "Password is not correctly formatted; please ensure that the password contains at least eight characters, a capital letter, a number, and a special character.";
-        }
-        if (!checkCellPhoneNumber(cellPhone)) {
-            return "Cell phone number incorrectly formatted or does not contain international code.";
-            
-        this.registeredUsername = username;
-        this.registeredPassword = password;
-        this.registeredCellPhone = cellPhone;
+	public WhatsappChat(String firstName, String lastName) {
+		this.firstName = firstName;
+		this.lastName = lastName;
+	}
 
-        return "Username successfully captured.\nPassword successfully captured.\nCell phone number successfully added.";
-        }
-        public boolean loginUser(String username, String password) {
-        if (username == null || password == null) {
-            return false;
-        }
-        return username.equals(this.registeredUsername) && password.equals(this.registeredPassword);
-    }
-     }
-public String returnLoginStatus(boolean isLoggedIn) {
-        if (isLoggedIn) {
-            return "Welcome " + firstName + ", " + lastName + " it is great to see you again.";
-        } else {
-            return "Username or password incorrect, please try again.";
-        }
-    }
+	
+	public String getFirstName() {
+		return firstName;
+	}
 
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
 
-     
+	public String getLastName() {
+		return lastName;
+	}
 
-            
-
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
