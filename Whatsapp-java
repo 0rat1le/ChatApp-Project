@@ -58,3 +58,85 @@ public class Whatsapp {
                 if (registrationMessage.contains("incorrectly formatted") || registrationMessage.contains("not corretly formatted")) {
                     System.out.println("\nRegistration failed. Exiting" );
                     scanner.close();
+                    return;
+                    
+                }
+               System.out.println("\n=== LOGIN ===");
+        System.out.print("Enter Username: ");
+        String loginUsername = scanner.nextLine();
+
+        System.out.print("Enter Password: ");
+        String loginPassword = scanner.nextLine();
+
+        boolean loginSuccess = userLogin.loginUser(loginUsername, loginPassword);
+        System.out.println("\n" + userLogin.returnLoginStatus(loginSuccess));
+
+        scanner.close();
+            }
+    }
+     public boolean checkUsername(String password) {
+         return registeredUsername != null && registeredUsername.contains("-") && registeredUsername.length() <= 5;
+     }
+     public boolean checkPasswordComplexity(String password) {
+         if (password == null || password.length() < 8) {
+             return false;
+         }
+         boolean hasUppercase = false;
+         boolean hasDigit = false;
+         boolean hasSpecialChar = false;
+          for (char c : password.toCharArray()) {
+              if (Character.isUpperCase(c)) {
+                  hasUppercase = true;
+              }
+              else if (Character.isDigit(c)){
+                  hasDigit = true;
+              }
+              else if (Character.isLetterOrDigit(c)){
+                  hasSpecialChar = true;
+              }
+          }
+          return hasUppercase && hasDigit && hasSpecialChar;
+         }
+     public boolean checkCellPhoneNumber(String cellPhoneNumber) {
+         if (cellPhoneNumber == null) {
+            return false;
+}
+         String cellRegex = "^\\+\\d{1,9}$";
+        return cellPhoneNumber.length() <= 10 && Pattern.matches (cellRegex, cellPhoneNumber);
+    }
+     public String registerUser(String username, String password, String cellPhone) {
+        if (!checkUsername(username)) {
+            return "Username is not correctly formatted; please ensure that your username contains an underscore and is no more than five characters in length.";
+        }
+        if (!checkPasswordComplexity(password)) {
+            return "Password is not correctly formatted; please ensure that the password contains at least eight characters, a capital letter, a number, and a special character.";
+        }
+        if (!checkCellPhoneNumber(cellPhone)) {
+            return "Cell phone number incorrectly formatted or does not contain international code.";
+            
+        this.registeredUsername = username;
+        this.registeredPassword = password;
+        this.registeredCellPhone = cellPhone;
+
+        return "Username successfully captured.\nPassword successfully captured.\nCell phone number successfully added.";
+        }
+        public boolean loginUser(String username, String password) {
+        if (username == null || password == null) {
+            return false;
+        }
+        return username.equals(this.registeredUsername) && password.equals(this.registeredPassword);
+    }
+     }
+public String returnLoginStatus(boolean isLoggedIn) {
+        if (isLoggedIn) {
+            return "Welcome " + firstName + ", " + lastName + " it is great to see you again.";
+        } else {
+            return "Username or password incorrect, please try again.";
+        }
+    }
+
+
+     
+
+            
+
