@@ -1,9 +1,14 @@
-package WhatsappChat;
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Main.java to edit this template
+ */
+package whatsapp;
+
 
 import java.util.Scanner;
 import java.util.regex.Pattern;
 
-public class WhatsappChat{
+public class WhatsApp {
 
 	
 	private String registeredUsername;
@@ -13,10 +18,10 @@ public class WhatsappChat{
 	private String lastName;
 
 	
-	public WhatsappChat() {
+	public WhatsApp() {
 	}
 
-	public WhatsappChat(String firstName, String lastName) {
+	public WhatsApp(String firstName, String lastName) {
 		this.firstName = firstName;
 		this.lastName = lastName;
 	}
@@ -48,7 +53,7 @@ public class WhatsappChat{
 		System.out.print("Enter Last Name: ");
 		String lastName = scanner.nextLine();
 
-		WhatsappChat userLogin = new WhatsappChat(firstName, lastName);
+		WhatsApp userLogin = new WhatsApp(firstName, lastName);
 
 		System.out.print("Enter Username: ");
 		String username = scanner.nextLine();
@@ -142,4 +147,4 @@ public class WhatsappChat{
 	}
 } 
 
-0
+
