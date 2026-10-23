@@ -2,6 +2,8 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Main.java to edit this template
  */
+
+
 package whatsapp;
 
 import java.io.File;
@@ -10,7 +12,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
-  public class WhatsApp {
+
+public class WhatsApp {
 
     private String registeredUsername;
     private String registeredPassword;
@@ -49,14 +52,14 @@ import java.util.Scanner;
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
-        
+       
         System.out.print("Enter First Name: ");
         String firstName = scanner.nextLine();
 
         System.out.print("Enter Last Name: ");
         String lastName = scanner.nextLine();
 
-        WhatsApp app = new WhatsApp(firstName, lastName);
+        WhatsApp userLogin = new WhatsApp(firstName, lastName);
 
         System.out.print("Enter Username: ");
         String username = scanner.nextLine();
@@ -67,7 +70,7 @@ import java.util.Scanner;
         System.out.print("Enter Cell Phone Number: ");
         String cellPhone = scanner.nextLine();
 
-        String registrationMessage = app.registerUser(username, password, cellPhone);
+        String registrationMessage = userLogin.registerUser(username, password, cellPhone);
         System.out.println("\n" + registrationMessage);
 
         if (registrationMessage.contains("incorrectly formatted")
@@ -77,7 +80,7 @@ import java.util.Scanner;
             return;
         }
 
-       
+        
         System.out.println("\n=== LOGIN ===");
         System.out.print("Enter Username: ");
         String loginUsername = scanner.nextLine();
@@ -85,14 +88,15 @@ import java.util.Scanner;
         System.out.print("Enter Password: ");
         String loginPassword = scanner.nextLine();
 
-        boolean loginSuccess = app.loginUser(loginUsername, loginPassword);
-        System.out.println("\n" + app.returnLoginStatus(loginSuccess));
+        boolean loginSuccess = userLogin.loginUser(loginUsername, loginPassword);
+        System.out.println("\n" + userLogin.returnLoginStatus(loginSuccess));
 
         if (!loginSuccess) {
             scanner.close();
             return;
         }
 
+        
         System.out.println("\nWelcome to QuickChat.");
 
         boolean running = true;
@@ -131,7 +135,8 @@ import java.util.Scanner;
                         while (true) {
                             System.out.print("Enter recipient cell number: ");
                             recipient = scanner.nextLine().trim();
-                            if (app.checkRecipientCell(recipient)) {
+
+                            if (userLogin.checkRecipientCell(recipient)) {
                                 break;
                             } else {
                                 System.out.println("Recipient cell number is invalid. Ensure it contains an international code and is valid.");
@@ -152,24 +157,24 @@ import java.util.Scanner;
                             }
                         }
 
-                        String messageID = app.generateRandomMessageId();
+                        String messageID = userLogin.generateRandomMessageId();
 
-                        if (!app.checkMessageID(messageID)) {
+                        if (!userLogin.checkMessageID(messageID)) {
                             System.out.println("Message ID is invalid.");
                             continue;
                         }
 
-                        int messageNumber = app.getNextMessageNumber();
-                        String messageHash = app.createMessageHash(messageID, messageNumber, messageText);
+                        int messageNumber = userLogin.getNextMessageNumber();
+                        String messageHash = userLogin.createMessageHash(messageID, messageNumber, messageText);
 
                         Message newMessage = new Message(messageID, messageNumber, recipient, messageText, messageHash);
 
-                        String action = app.SentMessage(scanner);
+                        String action = userLogin.SentMessage(scanner);
 
                         if ("SEND".equals(action)) {
-                            app.sentMessages.add(newMessage);
+                            userLogin.sentMessages.add(newMessage);
                             System.out.println("Message successfully sent");
-                            app.displayMessageDetails(newMessage);
+                            userLogin.displayMessageDetails(newMessage);
                         } else if ("DISREGARD".equals(action)) {
                             System.out.println("Press 0 to delete the message");
                             String deleteChoice = scanner.nextLine().trim();
@@ -180,16 +185,16 @@ import java.util.Scanner;
                                 System.out.println("Message disregarded");
                             }
                         } else if ("STORE".equals(action)) {
-                            app.storedMessages.add(newMessage);
-                            app.storeMessage(newMessage);
+                            userLogin.storeMessage(newMessage);
+                            userLogin.sentMessages.add(newMessage);
                             System.out.println("Message successfully stored");
                         }
                     }
 
                     System.out.println("\nAll messages processed.");
-                    System.out.println("Total messages sent: " + app.returnTotalMessagess());
+                    System.out.println("Total messages sent: " + userLogin.returnTotalMessagess());
                     System.out.println("\nMessages sent while the program is running:");
-                    System.out.println(app.printMessages());
+                    System.out.println(userLogin.printMessages());
 
                     break;
 
@@ -209,8 +214,7 @@ import java.util.Scanner;
 
         scanner.close();
     }
-
-    
+   
     public boolean checkUserName(String username) {
         if (username == null) return false;
         if (!username.contains("_") || username.length() > 5) return false;
@@ -277,13 +281,13 @@ import java.util.Scanner;
         }
     }
 
-  
+    
     public boolean checkMessageID(String messageId) {
         if (messageId == null) {
             return false;
         }
 
-        return messageId.length() <= 10;
+        return messageId.length() >= 10;
     }
 
     public boolean checkRecipientCell(String recipient) {
@@ -298,10 +302,10 @@ import java.util.Scanner;
         }
 
         if (value.startsWith("+")) {
-            return value.matches("^\\+[0-9]{9,10}$");
+            return value.matches("^\\+[0-9]{10,13}$");
         }
 
-        return value.matches("^[0-9]{10}$");
+        return value.matches("^[0-9]{13}$");
     }
 
     public String createMessageHash(String messageId, int messageNumber, String message) {
@@ -314,7 +318,6 @@ import java.util.Scanner;
         }
 
         String[] words = message.trim().split("\\s+");
-
         String firstWord = "";
         String lastWord = "";
 
@@ -382,28 +385,31 @@ import java.util.Scanner;
     }
 
     public void storeMessage(Message message) {
+        storedMessages.add(message);
+        writeStoredMessagesToJson();
+    }
+
+    private void writeStoredMessagesToJson() {
         File file = new File("messages.json");
 
-        try {
-            FileWriter writer = new FileWriter(file, true);
+        try (FileWriter writer = new FileWriter(file)) {
+            writer.write("[");
+            for (int i = 0; i < storedMessages.size(); i++) {
+                Message msg = storedMessages.get(i);
 
-            if (file.length() == 0) {
-                writer.write("[");
-            } else {
-                writer.write(",\n");
+                writer.write("{");
+                writer.write("\"messageId\":\"" + escapeJson(msg.getMessageId()) + "\",");
+                writer.write("\"messageNumber\":" + msg.getMessageNumber() + ",");
+                writer.write("\"recipient\":\"" + escapeJson(msg.getRecipient()) + "\",");
+                writer.write("\"message\":\"" + escapeJson(msg.getMessageText()) + "\",");
+                writer.write("\"hash\":\"" + escapeJson(msg.getHash()) + "\"");
+                writer.write("}");
+
+                if (i < storedMessages.size() - 1) {
+                    writer.write(",\n");
+                }
             }
-
-            writer.write("{");
-            writer.write("\"messageId\":\"" + escapeJson(message.getMessageId()) + "\",");
-            writer.write("\"messageNumber\":" + message.getMessageNumber() + ",");
-            writer.write("\"recipient\":\"" + escapeJson(message.getRecipient()) + "\",");
-            writer.write("\"message\":\"" + escapeJson(message.getMessageText()) + "\",");
-            writer.write("\"hash\":\"" + escapeJson(message.getHash()) + "\"");
-            writer.write("}");
-
             writer.write("]");
-            writer.close();
-
         } catch (IOException e) {
             System.out.println("Could not store message in JSON file.");
         }
@@ -465,4 +471,3 @@ import java.util.Scanner;
     }
 }
 
-   
