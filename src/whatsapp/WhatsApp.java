@@ -18,6 +18,13 @@ public class WhatsApp {
 	private String lastName;
 
 	
+    private final List<Message> sentMessages = new ArrayList<>();
+    private final List<Message> disregardedMessages = new ArrayList<>();
+    private final List<Message> storedMessages = new ArrayList<>();
+    private final List<Message> allMessages = new ArrayList<>();
+    private int messageCounter = 0;
+
+	
 	public WhatsApp() {
 	}
 
